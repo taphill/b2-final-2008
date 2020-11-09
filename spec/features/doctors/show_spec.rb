@@ -33,5 +33,13 @@ RSpec.describe "Doctors/Show", type: :feature do
       expect(page).to have_content(@patient2.name)
       expect(page).to have_content(@patient3.name)
     end
+
+    it 'can remove a patient' do
+      expect(page).to have_content(@patient1.name)
+      click_button "Remove #{@patient1.name}"
+
+      expect(page).to have_current_path(doctor_path(@doctor))
+      expect(page).to_not have_content(@patient1.name)
+    end
   end
 end
