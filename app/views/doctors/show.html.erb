@@ -8,5 +8,5 @@
 
 <% @doctor.patients.each do |patient| %>
   <p><%= patient.name %></p>
-  <%= button_to("Remove #{patient.name}", doctors_patient_path(patient), method: :delete) %>
+  <%= button_to("Remove #{patient.name}", doctors_patient_path(patient), params: { did: @doctor.id} , method: :delete) %>
 <% end %>

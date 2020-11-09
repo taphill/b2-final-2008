@@ -42,4 +42,28 @@ RSpec.describe "Doctors/Show", type: :feature do
       expect(page).to_not have_content(@patient1.name)
     end
   end
+
+  context 'when removing a patient' do
+    before do
+      @hospital = Hospital.create(name: 'Grey Sloan Memorial Hospital') 
+      @doctor1 = @hospital.doctors.create(name: 'Meredith Grey', specialty: 'General Surgery', university: 'Harvard') 
+      @doctor2 = @hospital.doctors.create(name: 'Meredith Grey', specialty: 'General Surgery', university: 'Harvard') 
+
+      @patient = Patient.create(name: 'Denny Duquette', age: 39)
+      DoctorPatient.create(doctor_id: @doctor1.id, patient_id: @patient.id)
+      DoctorPatient.create(doctor_id: @doctor2.id, patient_id: @patient.id)
+    end
+
+    it 'does not delete the patient from the database, only the doctors caseload' do
+      visit doctor_path(@doctor1)
+      expect(page).to have_content(@patient.name)
+
+      click_button "Remove #{@patient.name}"
+      expect(page).to have_current_path(doctor_path(@doctor1))
+      expect(page).to_not have_content(@patient.name)
+
+      visit doctor_path(@doctor2)
+      expect(page).to have_content(@patient.name)
+    end
+  end
 end

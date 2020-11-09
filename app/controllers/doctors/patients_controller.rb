@@ -1,6 +1,6 @@
 class Doctors::PatientsController < ApplicationController
   def destroy
-    doctor_patient = DoctorPatient.find(params[:id])
+    doctor_patient = DoctorPatient.where(patient_id: params[:id], doctor_id: params[:did]).first
     id = doctor_patient.doctor_id
 
     doctor_patient.destroy
